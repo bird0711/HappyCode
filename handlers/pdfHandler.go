@@ -19,7 +19,7 @@ func (h *PdfHandler) GeneratePDFGet(c *gin.Context) {
 	err := h.pdfUsecase.GenerateSamplePDF()
 	if err != nil {
 		c.JSON(500, gin.H{
-			"message": err,
+			"message": err.Error(),
 		})
 
 		return

@@ -19,8 +19,7 @@ func (uc *PdfUsecase) GenerateSamplePDF() error {
 	// Create new PDF generator
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return fmt.Errorf("failed to initialize wkhtmltopdf: %w", err)
 	}
 
 	// Set global options
@@ -34,15 +33,13 @@ func (uc *PdfUsecase) GenerateSamplePDF() error {
 	// Create PDF document in internal buffer
 	err = pdfg.Create()
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return fmt.Errorf("failed to create PDF: %w", err)
 	}
 
 	// Write buffer contents to file on disk
 	err = pdfg.WriteFile("./sample.pdf")
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return fmt.Errorf("failed to write PDF file: %w", err)
 	}
 
 	fmt.Println("PDF Generated Successfully")

@@ -22,20 +22,21 @@ func ConnectDB() {
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASS")
 	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
 	dbName := os.Getenv("DB_NAME")
 
 	// CONFIGURE DB CONN
 	if dbUsingPass {
-		dsn = fmt.Sprintf("%s:%s@%s/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPass, dbHost, dbName)
+		dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPass, dbHost, dbPort, dbName)
 	} else {
-		dsn = fmt.Sprintf("%s@%s/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbHost, dbName)
+		dsn = fmt.Sprintf("%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbHost, dbPort, dbName)
 	}
 
 	// INIT DB CONN
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		log.Printf("[ERR] Failed to connect to DB")
+		log.Fatalf("[ERR] Failed to connect to DB: %v", err)
 	} else {
 		log.Printf("[INFO] Connected to DB")
 	}
